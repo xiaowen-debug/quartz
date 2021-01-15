@@ -10,7 +10,6 @@ import static org.quartz.JobBuilder.*;
 import static org.quartz.TriggerBuilder.*;
 import static org.quartz.SimpleScheduleBuilder.*;
 
-
 /**
  * @author xiaowen
  * @create 2021/1/15 22:06
