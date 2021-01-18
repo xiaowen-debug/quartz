@@ -16,6 +16,14 @@ import java.util.StringJoiner;
  */
 public class HelloDataJob implements Job {
 
+    private String xiaowen;
+
+    // 形参与成员变量一致，则Quartz会自动注入
+    public void setXiaowen(String xiaowen) {
+        this.xiaowen = xiaowen;
+    }
+
+
     public HelloSpringService helloSpringService;
 
     public void execute(JobExecutionContext context) throws JobExecutionException {
@@ -41,6 +49,10 @@ public class HelloDataJob implements Job {
          */
         System.out.println(context.getMergedJobDataMap().get("xiaowen"));
 
+        System.out.println("=======++++++=======" + xiaowen);
+
         System.out.println(helloSpringService);
+
+
     }
 }
