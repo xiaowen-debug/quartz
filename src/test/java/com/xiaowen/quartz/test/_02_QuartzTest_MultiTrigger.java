@@ -1,20 +1,30 @@
-package com.xiaowen.quartz.first;
+package com.xiaowen.quartz.test;
 
-import ch.qos.logback.core.util.TimeUtil;
-import org.quartz.*;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.quartz.JobBuilder.*;
-import static org.quartz.TriggerBuilder.*;
-import static org.quartz.SimpleScheduleBuilder.*;
+import static org.quartz.JobBuilder.newJob;
+import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
+import static org.quartz.TriggerBuilder.newTrigger;
 
 /**
  * @author xiaowen
  * @create 2021/1/15 22:06
- */
-public class QuartzTest {
+ *
+ * 触发器
+ *
+ * 调度器可以调用多个触发器
+ * 一个触发器只能调用一个JOB
+ * 一个JOB可以被多个触发器调用
+ *
+ *
+ * */
+public class _02_QuartzTest_MultiTrigger {
 
     public static void main(String[] args) {
 
@@ -38,14 +48,31 @@ public class QuartzTest {
                     //启动方式-策略
                     .withSchedule(simpleSchedule()
                             //执行周期4S
-                        .withIntervalInSeconds(4)
+                        .withIntervalInSeconds(1)
                             //循环
                         .repeatForever())
                     .build();
 
+            Trigger trigger2 = newTrigger()
+                    //标识
+                    .withIdentity("trigger2", "group1")
+                    //指定执行任务
+                    .forJob("job1", "group1")
+                    //启动
+                    .startNow()
+                    //启动方式-策略
+                    .withSchedule(simpleSchedule()
+                            //执行周期4S
+                            .withIntervalInSeconds(3)
+                            //循环
+                            .repeatForever())
+                    .build();
+
             scheduler.scheduleJob(job, trigger);
 
-            TimeUnit.SECONDS.sleep(20);
+            scheduler.scheduleJob(trigger2);
+
+            TimeUnit.SECONDS.sleep(3);
 
             scheduler.shutdown();
         } catch (SchedulerException e) {
